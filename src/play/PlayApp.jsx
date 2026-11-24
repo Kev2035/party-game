@@ -37,7 +37,6 @@ export function PlayApp() {
   const tutorial = useTutorial(me ? myId : null)
 
   usePresence(me ? myId : null)
-  useWakeLock(!!me && game?.status !== 'ended')
 
   if (!gameLoaded || !meLoaded) return <Screen>Caricamento…</Screen>
 
@@ -140,31 +139,4 @@ function usePresence(playerId) {
       document.removeEventListener('visibilitychange', onVisible)
     }
   }, [playerId])
-}
-
-// Tiene acceso lo schermo finché la pagina è aperta (se il telefono lo permette): con lo schermo
-// spento il segnale di presenza si ferma e il giocatore sembrerebbe andato via.
-function useWakeLock(on) {
-  useEffect(() => {
-    if (!on || !navigator.wakeLock) return undefined
-    let lock = null
-    let stopped = false
-    const ask = async () => {
-      if (document.visibilityState !== 'visible') return
-      try {
-        const l = await navigator.wakeLock.request('screen')
-        if (stopped) l.release()
-        else lock = l
-      } catch {
-        /* batteria scarica o non permesso: pazienza */
-      }
-    }
-    ask()
-    document.addEventListener('visibilitychange', ask)
-    return () => {
-      stopped = true
-      document.removeEventListener('visibilitychange', ask)
-      lock?.release()
-    }
-  }, [on])
 }

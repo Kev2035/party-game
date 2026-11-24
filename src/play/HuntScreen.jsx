@@ -38,9 +38,6 @@ export function HuntScreen({ me, players, now, onHelp }) {
 
   // il motore ha cambiato bersaglio perché il vecchio telefono si è scollegato
   const lost = target && me.targetLost?.newId === me.targetId ? me.targetLost : null
-  useEffect(() => {
-    if (lost) navigator.vibrate?.([120, 80, 120])
-  }, [lost?.newId, lost?.symbol])
 
   return (
     <div className="hunt">

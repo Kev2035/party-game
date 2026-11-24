@@ -18,7 +18,7 @@ export const TIMING = {
   SKIP_COOLDOWN_MS: 60_000,
   CHALLENGE_IDLE_MS: 3 * 60_000, // sfida annullata se nessuno muove
   ONESHOT_IDLE_MS: 6 * 60_000, // le missioni dei QR richiedono più tempo
-  OFFLINE_MS: 90_000, // telefono senza segnale da più di così: non viene assegnato come bersaglio
+  OFFLINE_MS: 3 * 60_000, // telefono senza segnale da più di così: non viene assegnato come bersaglio
   PRESENCE_EVERY_MS: 15_000,
   TICK_MS: 500,
   LOCK_REFRESH_MS: 1_500,

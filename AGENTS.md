@@ -122,8 +122,8 @@ Le foto sono JPEG base64, 320 px e circa 50 KB (`utils/photo.js`).
 ### Bersagli e presenza
 
 - Il bersaglio è sempre **l'id di un giocatore registrato** (`pickTarget`); il simbolo mostrato è il suo. Non può esistere un simbolo senza proprietario. Simboli unici fino a 44 giocatori (`SYMBOL_NAMES`).
-- "Collegato" non significa "in sala": ogni telefono con la pagina aperta scrive `presence/<id>` ogni 15 s. Oltre `TIMING.OFFLINE_MS` (90 s) senza segnale il giocatore non viene assegnato e, se era il bersaglio di qualcuno, viene sostituito; il cacciatore vede l'avviso (`targetLost`). Chi è in sfida non viene sostituito.
-- `useWakeLock` (`PlayApp.jsx`) tiene acceso lo schermo, perché con lo schermo spento il segnale si ferma. Non abbassare `OFFLINE_MS` sotto i 60 s: basterebbe un telefono in tasca per far cambiare bersagli di continuo.
+- "Collegato" non significa "in sala": ogni telefono con la pagina aperta scrive `presence/<id>` ogni 15 s. Oltre `TIMING.OFFLINE_MS` (3 minuti) senza segnale il giocatore non viene assegnato e, se era il bersaglio di qualcuno, viene sostituito; il cacciatore vede l'avviso (`targetLost`). Chi è in sfida non viene sostituito.
+- Con lo schermo bloccato il segnale si ferma, anche se la persona è in sala: non abbassare troppo `OFFLINE_MS`, o basterebbe un telefono in tasca per far cambiare bersagli di continuo.
 - La carta "Tu sei…" con simbolo e codice resta visibile **anche durante le sfide**: se sparisce, chi viene cercato non sa rispondere.
 
 ### Variabili d'ambiente

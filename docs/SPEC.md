@@ -291,6 +291,6 @@ Tutti i testi delle sfide (istruzioni, categorie, scioglilingua, domande) devono
 
 ## 9. Robustezza
 
-- Un telefono senza segnale da più di 90 secondi non viene assegnato come bersaglio. Se lo era già, il cacciatore riceve un nuovo bersaglio e un avviso ("il telefono di 🐳 Balena non è più collegato").
+- Un telefono senza segnale da più di 3 minuti non viene assegnato come bersaglio. Se lo era già, il cacciatore riceve un nuovo bersaglio e un avviso ("il telefono di 🐳 Balena non è più collegato").
 - Telefoni bloccati, cali di rete e ricaricamenti non devono mai rompere la partita.
 - La fotocamera dei telefoni richiede HTTPS: per le prove in casa c'è `npm run dev:https`.
