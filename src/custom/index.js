@@ -14,6 +14,7 @@ export const honoreeLabel = honoree || 'chi organizza la festa'
 
 export const durationMin = config.durationMin > 0 ? config.durationMin : 45
 export const drinksEnabled = config.drinksEnabled !== false
+export const hiddenQrs = config.hiddenQrs !== false
 export const disabledChallenges = config.disabledChallenges || []
 
 export { PERSONAL_QUESTION_CHANCE, personalQuestions } from './questions.js'

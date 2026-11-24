@@ -4,6 +4,7 @@ import { formatClock } from '../utils/text.js'
 import { Card } from '../ui/Rough.jsx'
 import { LANES, Rain, emojiItems } from '../ui/Rain.jsx'
 import { QR_SPOTS } from '../content/qr.js'
+import { hiddenQrs } from '../custom/index.js'
 import { Leaderboard } from './Leaderboard.jsx'
 import { Feed } from './Feed.jsx'
 import { useEngine } from './HostApp.jsx'
@@ -36,7 +37,7 @@ export function RunningScreen({ game, players, photos }) {
       <header className="tv-header">
         <h1 className="tv-title small hl">{game.name}</h1>
         <div className="tv-header-right">
-          <span className="qr-chip">🔍 QR nascosti: {qrFound}/{QR_SPOTS.length}</span>
+          {hiddenQrs && <span className="qr-chip">🔍 QR nascosti: {qrFound}/{QR_SPOTS.length}</span>}
           <div className={`tv-timer ${hurry ? 'hurry' : ''}`}>⏱ {formatClock(left)}</div>
         </div>
       </header>

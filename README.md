@@ -44,7 +44,7 @@ Per collegare TV e telefoni serve mettere il gioco online: circa 30 minuti, una 
 
 - Un PC collegato alla TV, sempre acceso, con la pagina `/host` aperta (**senza** `?debug`: il pannello mostra i codici di tutti)
 - Telefoni con internet
-- I 6 QR nascosti, stampati da `/host/qr-print`
+- I 6 QR da nascondere, stampati da `/host/qr-print`. Se non li usi, metti `hiddenQrs: false` in `config.js`
 - Per alcune sfide: bicchieri di plastica e una pallina da ping pong. Se non li hai, escludi `beerPong`, `flipCup` e `cupStack` in `config.js`
 
 I "sorsi" 🍺 sono solo scenici e si disattivano quando si crea la partita.

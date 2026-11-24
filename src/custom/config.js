@@ -19,6 +19,10 @@ export const config = {
   durationMin: 45,
   drinksEnabled: true,
 
+  // Hai stampato e nascosto i QR (/host/qr-print)? Con `false` il gioco non li nomina,
+  // così nessuno li cerca per niente.
+  hiddenQrs: true,
+
   // Id delle sfide da NON far uscire (gli id sono le chiavi in src/content/challenges.js).
   // Es. senza bicchieri e palline: ['beerPong', 'flipCup', 'cupStack']
   disabledChallenges: [],

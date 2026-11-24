@@ -7,7 +7,7 @@ Leggi questo file per intero prima di modificare qualcosa. Le regole di gioco co
 Chi ti scrive di solito **non è un programmatore**: ha scaricato il gioco e vuole adattarlo alla propria festa. Quindi:
 
 - parla in modo semplice, spiega cosa hai cambiato e come provarlo;
-- se chiede "personalizzalo", comincia da `src/custom/` e fai queste domande: nome della partita? chi gestisce la TV? c'è un festeggiato? c'è un accessorio comune (parrucche, cappelli…)? quanto dura? avete bicchieri e pallina da ping pong? vanno bene i sorsi? avete foto per il Memory? domande sul festeggiato?
+- se chiede "personalizzalo", comincia da `src/custom/` e fai queste domande: nome della partita? chi gestisce la TV? c'è un festeggiato? c'è un accessorio comune (parrucche, cappelli…)? quanto dura? avete bicchieri e pallina da ping pong? nasconderete i QR? vanno bene i sorsi? avete foto per il Memory? domande sul festeggiato?
 - per i contenuti nuovi: **italiano**, tono scherzoso, frasi brevi, apostrofo tipografico `’` nei testi;
 - non pubblicare online, non fare push e non cancellare dati senza un sì esplicito.
 
@@ -185,7 +185,7 @@ Per una festa: `disabledChallenges` in `config.js`. Per sempre: elimina file, im
 `QR_SPOTS` in `content/qr.js`. Gli `id` sono stampati: **dopo la stampa non cambiarli**. Servono almeno tante missioni quanti QR `oneshot`.
 
 ### Tutorial
-`content/tutorial.js`: pochi passi, frasi brevi. Si apre da solo al primo ingresso e si riapre da "Come si gioca". I punti citati sono scritti a mano: se cambi `POINTS`, aggiorna anche qui. Mai nominare il finale.
+`content/tutorial.js`: pochi passi, frasi brevi. Si apre da solo al primo ingresso e si riapre da "Come si gioca". I punti delle sfide sono scritti a mano: se cambi `POINTS`, aggiorna anche qui. La schermata e la pillola sui QR spariscono con `hiddenQrs: false` in `config.js`. Mai nominare il finale.
 
 ### Stile
 Colori e font in `:root` di `styles.css` (evidenziatori `--hl-yellow|pink|green|blue`). Riquadri e bottoni: `Card` e `Button` di `ui/Rough.jsx`. Font da Google in `index.html`. Emoji dello sfondo: `ui/Rain.jsx` e `ui/Stickers.jsx`.
