@@ -205,6 +205,7 @@ a { color: var(--ink); }
 .tv-title.small { font-size: 3.4em; text-align: left; }
 
 /* lobby */
+.lobby-tip { position: relative; z-index: 1; font-size: 1.9em; text-align: center; margin: 0.4em auto 0; padding: 0.1em 0.8em; background: var(--hl-yellow); border-radius: 0.5em; }
 .lobby-body { flex: 1; display: grid; grid-template-columns: auto 1fr; gap: 3em; align-items: center; min-height: 0; }
 .lobby-qr { text-align: center; padding: 1.2em; }
 .lobby-qr img { width: 24em; height: 24em; display: block; image-rendering: pixelated; }
@@ -330,11 +331,31 @@ a { color: var(--ink); }
 .hunt-symbol { font-size: 6rem; line-height: 1.1; }
 .hunt-form { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10px; align-items: center; }
 .code-input { font-family: var(--font-num); font-size: 2rem; text-align: center; letter-spacing: 0.3em; }
-.id-card .rough-content { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.id-title { font-family: var(--font-title); font-size: 1.6rem; }
-.id-body { display: flex; align-items: center; gap: 18px; }
-.id-symbol { font-size: 3.4rem; }
-.id-code { font-family: var(--font-num); font-size: 3rem; font-weight: 700; letter-spacing: 0.12em; background: var(--paper-card); padding: 0 12px; border-radius: 10px; }
+.card.id-card { padding: 6px 14px; }
+.id-card .rough-content { display: flex; align-items: center; gap: 10px; }
+.id-title { font-family: var(--font-title); font-size: 1.4rem; white-space: nowrap; }
+.id-symbol { font-size: 2.3rem; line-height: 1.2; }
+.id-name { flex: 1; min-width: 0; font-size: 1.3rem; line-height: 1; }
+.id-code { font-family: var(--font-num); font-size: 1.9rem; font-weight: 700; letter-spacing: 0.1em; background: var(--paper-card); padding: 0 10px; border-radius: 10px; }
+/* in sfida la carta si stringe: il minigioco deve stare nello schermo */
+.card.id-card.slim { padding: 1px 12px; }
+.id-card.slim .id-title, .id-card.slim .id-name { font-size: 1.1rem; }
+.id-card.slim .id-symbol { font-size: 1.4rem; }
+.id-card.slim .id-code { font-size: 1.2rem; }
+@media (max-height: 740px) {
+  .running-phone.in-challenge { gap: 6px; padding-bottom: 8px; }
+  .in-challenge .challenge { gap: 6px; }
+  .in-challenge .phone-header { padding: 4px 4px 2px; }
+  .in-challenge .card.challenge-head { padding: 8px 14px; }
+  .in-challenge .challenge-name { font-size: 2rem; }
+  .in-challenge .status-line { margin: 4px 0; }
+}
+.hunt-name { font-size: 1.7rem; line-height: 1; }
+.target-lost { text-align: center; }
+.tutorial .rough-content { display: flex; flex-direction: column; gap: 8px; text-align: center; }
+.tutorial .muted { margin: 0; }
+.tutorial .title { margin: 6px 0; }
+.tutorial-text { font-size: 1.4rem; line-height: 1.25; min-height: 6.3em; margin: 0; }
 .skip-btn { align-self: center; font-size: 1.2rem; }
 
 /* sfida */

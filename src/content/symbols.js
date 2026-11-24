@@ -4,12 +4,23 @@ export const AVATAR_EMOJIS = [
   '🧜', '🧞', '🦸', '🥸', '🤓', '😇', '🤪', '😜', '🫠', '🤯', '🥶', '🤩',
 ]
 
-export const HUNT_SYMBOLS = [
-  '🐙', '🦊', '🐸', '🐼', '🦄', '🐝', '🦖', '🐧', '🦉', '🐢', '🦀', '🐳',
-  '🦒', '🐌', '🦜', '🐞', '🦔', '🦩', '🐊', '🦥', '🍕', '🍩', '🌵', '🍄',
-  '🎸', '🚀', '⚓', '🎲', '🧲', '🔑', '🎺', '🪐', '🌈', '🍉', '🥑', '🧀',
-  '🎯', '🧸', '⛄', '🌻', '🍔', '🥨', '🛸', '🪁',
-]
+// Il nome evita equivoci: le emoji cambiano disegno tra un telefono e l'altro.
+export const SYMBOL_NAMES = {
+  '🐙': 'Polpo', '🦊': 'Volpe', '🐸': 'Rana', '🐼': 'Panda',
+  '🦄': 'Unicorno', '🐝': 'Ape', '🦖': 'T-Rex', '🐧': 'Pinguino',
+  '🦉': 'Gufo', '🐢': 'Tartaruga', '🦀': 'Granchio', '🐳': 'Balena',
+  '🦒': 'Giraffa', '🐌': 'Lumaca', '🦜': 'Pappagallo', '🐞': 'Coccinella',
+  '🦔': 'Riccio', '🦩': 'Fenicottero', '🐊': 'Coccodrillo', '🦥': 'Bradipo',
+  '🍕': 'Pizza', '🍩': 'Ciambella', '🌵': 'Cactus', '🍄': 'Fungo',
+  '🎸': 'Chitarra', '🚀': 'Razzo', '⚓': 'Ancora', '🎲': 'Dado',
+  '🧲': 'Calamita', '🔑': 'Chiave', '🎺': 'Tromba', '🪐': 'Saturno',
+  '🌈': 'Arcobaleno', '🍉': 'Anguria', '🥑': 'Avocado', '🧀': 'Formaggio',
+  '🎯': 'Freccette', '🧸': 'Orsetto', '⛄': 'Pupazzo di neve', '🌻': 'Girasole',
+  '🍔': 'Hamburger', '🥨': 'Pretzel', '🛸': 'Ufo', '🪁': 'Aquilone',
+}
+
+export const HUNT_SYMBOLS = Object.keys(SYMBOL_NAMES)
+export const symbolLabel = (symbol) => [symbol, SYMBOL_NAMES[symbol]].filter(Boolean).join(' ')
 
 // Nomi dei giocatori finti (solo debug)
 export const BOT_NAMES = [

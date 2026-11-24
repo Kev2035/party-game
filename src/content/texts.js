@@ -41,5 +41,6 @@ export const huntText = {
   go: 'Trovato! Si combatte ⚔️',
   skipCooldown: (s) => `Calma! Puoi cambiare tra ${s}s`,
   skipped: (symbol) => `Nuovo bersaglio: ${symbol}`,
+  targetLost: (oldSymbol, newSymbol) => `Il telefono di ${oldSymbol} non è più collegato. Ora cerca ${newSymbol}!`,
   noTarget: 'Nessun bersaglio per ora… aspetta altri giocatori',
 }

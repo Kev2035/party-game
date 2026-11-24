@@ -4,11 +4,13 @@ import { formatClock } from '../utils/text.js'
 import { leaderId, rankPlayers } from '../game/selectors.js'
 import { sendIntent } from '../game/intents.js'
 import { qrText } from '../content/qr.js'
+import { SYMBOL_NAMES } from '../content/symbols.js'
 import { Button, Card } from '../ui/Rough.jsx'
 import { HuntScreen } from './HuntScreen.jsx'
 import { ChallengeView } from './ChallengeView.jsx'
+import { Tutorial } from './Tutorial.jsx'
 
-export function RunningPhone({ game, me, pendingQr, onQrHandled }) {
+export function RunningPhone({ game, me, tutorial, pendingQr, onQrHandled }) {
   const now = useNow(1000)
   const [players] = useDb('players')
   const all = players || {}
@@ -26,7 +28,7 @@ export function RunningPhone({ game, me, pendingQr, onQrHandled }) {
   const closeView = useCallback(() => setViewing(null), [])
 
   return (
-    <div className="phone running-phone">
+    <div className={`phone running-phone ${shownChallenge ? 'in-challenge' : ''}`}>
       <header className="phone-header">
         <div className="ph-stat">
           <span className="ph-label">Punti</span>
@@ -43,6 +45,13 @@ export function RunningPhone({ game, me, pendingQr, onQrHandled }) {
           <span className="ph-value">{formatClock(game.endsAt - now)}</span>
         </div>
       </header>
+      {/* sempre visibile, anche in sfida: chi ti cerca può chiedertelo in qualsiasi momento */}
+      <Card className={`id-card ${shownChallenge ? 'slim' : ''}`} fill="var(--hl-blue)" fillStyle="hachure">
+        <span className="id-title">Tu sei</span>
+        <span className="id-symbol">{me.symbol}</span>
+        <span className="id-name">{SYMBOL_NAMES[me.symbol]}</span>
+        <span className="id-code">{me.code}</span>
+      </Card>
       {isLeader && <div className="leader-banner">👑 Hai una taglia sulla testa!</div>}
       {pendingQr && me.status !== 'idle' && <p className="msg good">{qrText.waitChallenge}</p>}
       {qrMsg.text && (
@@ -68,8 +77,10 @@ export function RunningPhone({ game, me, pendingQr, onQrHandled }) {
           <p className="big-emoji">⚔️</p>
           <p className="status-line waiting">Sfida in arrivo…</p>
         </div>
+      ) : tutorial.step !== null ? (
+        <Tutorial {...tutorial} />
       ) : (
-        <HuntScreen me={me} players={all} now={now} />
+        <HuntScreen me={me} players={all} now={now} onHelp={tutorial.open} />
       )}
     </div>
   )

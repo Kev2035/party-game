@@ -9,7 +9,7 @@ import { FINALE, POINTS, TIMING } from './constants.js'
 import { emptyStats, scoreResult } from './scoring.js'
 import { isOnline, leaderId } from './selectors.js'
 import { finaleRanking, finaleSchedule } from './finale.js'
-import { AVATAR_EMOJIS, BOT_NAMES, HUNT_SYMBOLS } from '../content/symbols.js'
+import { AVATAR_EMOJIS, BOT_NAMES, HUNT_SYMBOLS, symbolLabel } from '../content/symbols.js'
 import { feedText, huntText } from '../content/texts.js'
 import { QR_SPOTS, qrText } from '../content/qr.js'
 
@@ -205,6 +205,7 @@ export function createEngine({ onLeaderChange } = {}) {
       if (pid === ch.hunterId && ch.players.length > 1) {
         const other = ch.players.find((id) => id !== pid)
         updates[`${pid}/targetId`] = pickTarget(players, presence, pid, [other], now)
+        updates[`${pid}/targetLost`] = null
       }
     }
     await db.update('players', updates)
@@ -312,7 +313,7 @@ export function createEngine({ onLeaderChange } = {}) {
       const found = Object.values(players).find((p) => p.code === String(code || '').trim())
       if (!found) return { ok: false, message: huntText.wrongCode }
       if (found.id === me.id) return { ok: false, message: huntText.ownCode }
-      if (found.id !== me.targetId) return { ok: false, message: huntText.notTarget(players[me.targetId]?.symbol || '❓') }
+      if (found.id !== me.targetId) return { ok: false, message: huntText.notTarget(symbolLabel(players[me.targetId]?.symbol) || '❓') }
       const outcome = await tryChallenge(me.id, found.id)
       return outcome === 'ok' ? { ok: true, message: huntText.go } : { ok: false, message: huntText.targetBusy }
     },
@@ -328,10 +329,11 @@ export function createEngine({ onLeaderChange } = {}) {
       const targetId = pickTarget(players, await all('presence'), me.id, [me.targetId], now)
       await db.update(`players/${me.id}`, {
         targetId,
+        targetLost: null,
         lastSkipAt: now,
         'stats/targetSkips': (me.stats?.targetSkips || 0) + 1,
       })
-      return { ok: true, message: targetId ? huntText.skipped(players[targetId].symbol) : huntText.noTarget }
+      return { ok: true, message: targetId ? huntText.skipped(symbolLabel(players[targetId].symbol)) : huntText.noTarget }
     },
 
     async move({ playerId, challengeId, move }) {
@@ -475,11 +477,16 @@ export function createEngine({ onLeaderChange } = {}) {
         updates[`${p.id}/status`] = 'idle'
         updates[`${p.id}/challengeId`] = null
       }
-      // bersaglio mancante o sparito da più di 3 minuti: se ce n'è un altro, cambialo
+      // bersaglio mancante o col telefono scollegato (OFFLINE_MS): se ce n'è un altro, cambialo.
+      // Chi è in sfida è di sicuro in sala, anche se ha lo schermo spento.
       const target = players[p.targetId]
-      if (!target || !isOnline(target, presence, now)) {
+      if (!target || (target.status === 'idle' && !isOnline(target, presence, now))) {
         const next = pickTarget(players, presence, p.id, [], now)
-        if (next && next !== p.targetId) updates[`${p.id}/targetId`] = next
+        if (next && next !== p.targetId) {
+          updates[`${p.id}/targetId`] = next
+          // il telefono avvisa: "il tuo bersaglio non è più collegato"
+          updates[`${p.id}/targetLost`] = target ? { symbol: target.symbol, newId: next } : null
+        }
       }
     }
     if (Object.keys(updates).length) await db.update('players', updates)

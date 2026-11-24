@@ -12,7 +12,8 @@ import { missions } from '../src/content/missions.js'
 import { chainCategories, huntColors, tongueTwisters } from '../src/content/physical.js'
 import { QR_SPOTS } from '../src/content/qr.js'
 import { generalQuestions } from '../src/content/quickQuiz.js'
-import { AVATAR_EMOJIS, HUNT_SYMBOLS } from '../src/content/symbols.js'
+import { AVATAR_EMOJIS, HUNT_SYMBOLS, SYMBOL_NAMES } from '../src/content/symbols.js'
+import { tutorial } from '../src/content/tutorial.js'
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const errors = []
@@ -50,6 +51,9 @@ for (const [name, list] of Object.entries({ mindMeldCategories, huntColors, tong
 check(memoryEmojis.length >= 6 && unique(memoryEmojis), 'memoryEmojis: servono almeno 6 emoji diverse')
 check(unique(HUNT_SYMBOLS) && unique(AVATAR_EMOJIS), 'symbols: simboli doppi')
 check(!HUNT_SYMBOLS.some((s) => AVATAR_EMOJIS.includes(s)), 'symbols: HUNT_SYMBOLS e AVATAR_EMOJIS non devono avere emoji in comune')
+check(Object.values(SYMBOL_NAMES).every(isText) && unique(Object.values(SYMBOL_NAMES)), 'symbols: ogni simbolo deve avere un nome, diverso dagli altri')
+check(tutorial.steps.length && tutorial.steps.every((s) => isText(s.emoji) && isText(s.title) && isText(s.text)), 'tutorial.steps: servono emoji, title e text')
+check(tutorial.tvTips.length && tutorial.tvTips.every(isText), 'tutorial.tvTips: elenco vuoto o testo mancante')
 check(unique(QR_SPOTS.map((q) => q.id)) && QR_SPOTS.every((q) => ['bonus', 'oneshot'].includes(q.type)), 'qr: id doppi o type sbagliato')
 
 // testi <-> moduli <-> registro

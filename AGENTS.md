@@ -66,7 +66,8 @@ src/
     texts.js           feed TV, finale, messaggi della caccia
     awards.js          premi del podio
     qr.js              i 6 QR nascosti e i loro messaggi
-    symbols.js         emoji avatar, simboli di caccia, nomi dei bot
+    symbols.js         emoji avatar, simboli di caccia con il loro nome, nomi dei bot
+    tutorial.js        mini tutorial (telefono) e pillole di regole (TV, sala d'attesa)
   challenges/        una sfida per file
     registry.js        elenco delle sfide + scelta casuale + contratto dei moduli
     solo.jsx choice.jsx physical.jsx coop.jsx   "fabbriche" (vedi §6)
@@ -80,7 +81,7 @@ src/
     mockBackend.js     localStorage + BroadcastChannel
     firebaseBackend.js Realtime Database + accesso anonimo
   host/              schermate TV (CreateGame, Lobby, RunningScreen, FinaleScreen, EndedScreen, QrPrint, DebugPanel)
-  play/              schermate telefono (JoinFlow, HuntScreen, ChallengeView, FinalePhone, …)
+  play/              schermate telefono (JoinFlow, Tutorial, HuntScreen, ChallengeView, FinalePhone, …)
   ui/                componenti comuni (Rough, Avatar, PhotoCapture, Rain, hooks…)
   utils/             id, foto, testo
   styles.css         tutto il CSS; colori come variabili in :root
@@ -117,6 +118,13 @@ Trappole (valgono per entrambi i backend):
 Dati: `game`, `players/<id>`, `challenges/<id>`, `qr/<id>`, `feed/<id>`, `photos/<playerId>`, `proofs/<challengeId>`, `presence`, `intents`, `replies`, `finale`, `finaleTaps`, `hostLock`, `debug`. Se aggiungi dati pesanti, mettili in un nodo a parte (come `photos`) ed elencali in `NO_MIRROR` di `firebaseBackend.js`. Un nuovo nodo non richiede regole nuove (il default è "utenti autenticati"), ma aggiungi una `.validate` in `database.rules.json` se accetta dati grandi.
 
 Le foto sono JPEG base64, 320 px e circa 50 KB (`utils/photo.js`).
+
+### Bersagli e presenza
+
+- Il bersaglio è sempre **l'id di un giocatore registrato** (`pickTarget`); il simbolo mostrato è il suo. Non può esistere un simbolo senza proprietario. Simboli unici fino a 44 giocatori (`SYMBOL_NAMES`).
+- "Collegato" non significa "in sala": ogni telefono con la pagina aperta scrive `presence/<id>` ogni 15 s. Oltre `TIMING.OFFLINE_MS` (90 s) senza segnale il giocatore non viene assegnato e, se era il bersaglio di qualcuno, viene sostituito; il cacciatore vede l'avviso (`targetLost`). Chi è in sfida non viene sostituito.
+- `useWakeLock` (`PlayApp.jsx`) tiene acceso lo schermo, perché con lo schermo spento il segnale si ferma. Non abbassare `OFFLINE_MS` sotto i 60 s: basterebbe un telefono in tasca per far cambiare bersagli di continuo.
+- La carta "Tu sei…" con simbolo e codice resta visibile **anche durante le sfide**: se sparisce, chi viene cercato non sa rispondere.
 
 ### Variabili d'ambiente
 
@@ -175,6 +183,9 @@ Per una festa: `disabledChallenges` in `config.js`. Per sempre: elimina file, im
 
 ### QR nascosti
 `QR_SPOTS` in `content/qr.js`. Gli `id` sono stampati: **dopo la stampa non cambiarli**. Servono almeno tante missioni quanti QR `oneshot`.
+
+### Tutorial
+`content/tutorial.js`: pochi passi, frasi brevi. Si apre da solo al primo ingresso e si riapre da "Come si gioca". I punti citati sono scritti a mano: se cambi `POINTS`, aggiorna anche qui. Mai nominare il finale.
 
 ### Stile
 Colori e font in `:root` di `styles.css` (evidenziatori `--hl-yellow|pink|green|blue`). Riquadri e bottoni: `Card` e `Button` di `ui/Rough.jsx`. Font da Google in `index.html`. Emoji dello sfondo: `ui/Rain.jsx` e `ui/Stickers.jsx`.

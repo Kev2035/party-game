@@ -105,6 +105,7 @@ Form: **nome partita** (valore iniziale in `src/custom/config.js`), **durata** (
 ### 5.2 Lobby (host + giocatori)
 - TV: nome partita grande, **QR gigante** che punta a `/play` (URL completo), URL scritto sotto, griglia dei giocatori entrati con foto e nickname che compaiono con animazione. Bottone "Inizia partita" (attivo con almeno 2 giocatori).
 - Telefono: inserisci nickname → scegli un'emoji → scatta un selfie con la fotocamera frontale (`getUserMedia` con anteprima, fallback a `<input type="file" accept="image/*" capture="user">`; foto facoltativa, se manca si usa l'emoji). Poi schermata "Sei dentro! Aspetta che <chi organizza> dia il via".
+- Appena entrato, il telefono mostra un mini tutorial di 4 schermate (si può saltare e riaprire con "Come si gioca"). In sala d'attesa la TV mostra le regole in pillole a rotazione.
 - L'ID del giocatore si salva in `localStorage`: se il telefono ricarica o chiude il browser, riaprendo `/play` rientra direttamente.
 - **Ingresso in ritardo** permesso anche a partita iniziata: parte da 0 punti, nessun vantaggio.
 
@@ -116,7 +117,7 @@ Ogni giocatore ha:
 Schermata principale del telefono durante la partita:
 - In alto: punti, posizione in classifica, timer residuo.
 - Al centro: **"Cerca: 🐙"** — il simbolo del proprio bersaglio. Il giocatore non sa chi è, deve chiedere in giro.
-- Sezione "La tua carta d'identità": il proprio simbolo e il proprio codice, da mostrare a chi ti cerca.
+- Carta "Tu sei…": il proprio simbolo (con il nome) e il proprio codice, da mostrare a chi ti cerca. Resta visibile anche durante le sfide.
 - Campo per inserire il codice del bersaglio trovato + bottone "Sfida!".
 - Bottone **"Cambia bersaglio"** (sempre disponibile, cooldown di 60 secondi tra un cambio e l'altro).
 
@@ -290,6 +291,6 @@ Tutti i testi delle sfide (istruzioni, categorie, scioglilingua, domande) devono
 
 ## 9. Robustezza
 
-- Un giocatore offline da più di 3 minuti non viene assegnato come bersaglio.
+- Un telefono senza segnale da più di 90 secondi non viene assegnato come bersaglio. Se lo era già, il cacciatore riceve un nuovo bersaglio e un avviso ("il telefono di 🐳 Balena non è più collegato").
 - Telefoni bloccati, cali di rete e ricaricamenti non devono mai rompere la partita.
 - La fotocamera dei telefoni richiede HTTPS: per le prove in casa c'è `npm run dev:https`.

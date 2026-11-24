@@ -4,12 +4,29 @@ import { Avatar } from '../ui/Avatar.jsx'
 import { Button, Card } from '../ui/Rough.jsx'
 import { Rain, emojiItems } from '../ui/Rain.jsx'
 import { MEMORY_PHOTOS } from '../ui/memoryPhotos.js'
+import { tutorial } from '../content/tutorial.js'
 import { useEngine } from './HostApp.jsx'
 
 // sala d'attesa: emoji della festa alternate alle foto del memory
 const LOBBY_RAIN = [...emojiItems(), ...Object.values(MEMORY_PHOTOS).map((value) => ({ kind: 'polaroid', value }))]
 
 export const playUrl = () => `${(import.meta.env.VITE_PUBLIC_URL || window.location.origin).replace(/\/$/, '')}/play`
+
+const TIP_MS = 5_000
+
+// Le regole in pillole, una alla volta, mentre si aspettano gli altri
+function LobbyTips() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((n) => (n + 1) % tutorial.tvTips.length), TIP_MS)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <p key={i} className="lobby-tip pop-in">
+      {tutorial.tvTips[i]}
+    </p>
+  )
+}
 
 export function Lobby({ game, players, photos }) {
   const engine = useEngine()
@@ -25,6 +42,7 @@ export function Lobby({ game, players, photos }) {
     <div className="tv lobby">
       <Rain items={LOBBY_RAIN} />
       <h1 className="tv-title">{game.name}</h1>
+      <LobbyTips />
       <div className="lobby-body">
         <Card className="lobby-qr">
           {qr && <img src={qr} alt="QR per entrare" />}

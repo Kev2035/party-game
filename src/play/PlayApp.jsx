@@ -8,7 +8,9 @@ import { qrText } from '../content/qr.js'
 import { Avatar } from '../ui/Avatar.jsx'
 import { Card } from '../ui/Rough.jsx'
 import { Stickers } from '../ui/Stickers.jsx'
+import { tutorial as tutorialText } from '../content/tutorial.js'
 import { JoinFlow } from './JoinFlow.jsx'
+import { Tutorial, useTutorial } from './Tutorial.jsx'
 import { RunningPhone } from './RunningPhone.jsx'
 import { FinalePhone } from './FinalePhone.jsx'
 import { EndedPhone } from './EndedPhone.jsx'
@@ -32,7 +34,10 @@ export function PlayApp() {
   const [me, meLoaded] = useDb(myId ? `players/${myId}` : null)
   const [photo] = useDb(myId ? `photos/${myId}` : null)
 
+  const tutorial = useTutorial(me ? myId : null)
+
   usePresence(me ? myId : null)
+  useWakeLock(!!me && game?.status !== 'ended')
 
   if (!gameLoaded || !meLoaded) return <Screen>Caricamento…</Screen>
 
@@ -67,6 +72,14 @@ export function PlayApp() {
     )
   }
 
+  if (game.status === 'lobby' && tutorial.step !== null) {
+    return (
+      <Screen>
+        <Tutorial {...tutorial} />
+      </Screen>
+    )
+  }
+
   if (game.status === 'lobby') {
     return (
       <Screen>
@@ -76,6 +89,9 @@ export function PlayApp() {
           <p className="nickname">{me.nickname}</p>
           <p>Aspetta che {hostLabel} dia il via…</p>
           {pendingQr ? <p className="msg good">{qrText.notRunning}</p> : <p className="muted">Tieni il telefono a portata di mano 😉</p>}
+          <button className="link-btn" onClick={tutorial.open}>
+            {tutorialText.reopen}
+          </button>
         </Card>
       </Screen>
     )
@@ -86,6 +102,7 @@ export function PlayApp() {
       <RunningPhone
         game={game}
         me={me}
+        tutorial={tutorial}
         pendingQr={pendingQr}
         onQrHandled={() => {
           clearQrParam()
@@ -123,4 +140,31 @@ function usePresence(playerId) {
       document.removeEventListener('visibilitychange', onVisible)
     }
   }, [playerId])
+}
+
+// Tiene acceso lo schermo finché la pagina è aperta (se il telefono lo permette): con lo schermo
+// spento il segnale di presenza si ferma e il giocatore sembrerebbe andato via.
+function useWakeLock(on) {
+  useEffect(() => {
+    if (!on || !navigator.wakeLock) return undefined
+    let lock = null
+    let stopped = false
+    const ask = async () => {
+      if (document.visibilityState !== 'visible') return
+      try {
+        const l = await navigator.wakeLock.request('screen')
+        if (stopped) l.release()
+        else lock = l
+      } catch {
+        /* batteria scarica o non permesso: pazienza */
+      }
+    }
+    ask()
+    document.addEventListener('visibilitychange', ask)
+    return () => {
+      stopped = true
+      document.removeEventListener('visibilitychange', ask)
+      lock?.release()
+    }
+  }, [on])
 }

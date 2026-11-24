@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { sendIntent } from '../game/intents.js'
 import { TIMING } from '../game/constants.js'
+import { SYMBOL_NAMES, symbolLabel } from '../content/symbols.js'
 import { huntText } from '../content/texts.js'
+import { tutorial } from '../content/tutorial.js'
 import { Button, Card } from '../ui/Rough.jsx'
 
-export function HuntScreen({ me, players, now }) {
+export function HuntScreen({ me, players, now, onHelp }) {
   const target = players[me.targetId]
   const [code, setCode] = useState('')
   const [msg, setMsg] = useState(null)
@@ -34,8 +36,15 @@ export function HuntScreen({ me, players, now }) {
     setMsg({ bad: !r.ok, text: r.message })
   }
 
+  // il motore ha cambiato bersaglio perché il vecchio telefono si è scollegato
+  const lost = target && me.targetLost?.newId === me.targetId ? me.targetLost : null
+  useEffect(() => {
+    if (lost) navigator.vibrate?.([120, 80, 120])
+  }, [lost?.newId, lost?.symbol])
+
   return (
     <div className="hunt">
+      {lost && <p className="msg bad target-lost">📵 {huntText.targetLost(symbolLabel(lost.symbol), symbolLabel(target.symbol))}</p>}
       <Card className="hunt-target" fill="var(--hl-yellow)">
         <span className="hunt-label">Cerca:</span>
         {target ? (
@@ -43,6 +52,7 @@ export function HuntScreen({ me, players, now }) {
         ) : (
           <span className="muted">{huntText.noTarget}</span>
         )}
+        {target && <span className="hunt-name">{SYMBOL_NAMES[target.symbol]}</span>}
         {target && <span className="muted">Chi sarà? Chiedi in giro! 🕵️</span>}
       </Card>
 
@@ -63,17 +73,11 @@ export function HuntScreen({ me, players, now }) {
       </form>
       {msg && <p className={`msg ${msg.bad ? 'bad' : 'good'}`}>{msg.text}</p>}
 
-      <Card className="id-card" fill="var(--hl-blue)" fillStyle="hachure">
-        <span className="id-title">La tua carta d’identità</span>
-        <div className="id-body">
-          <span className="id-symbol">{me.symbol}</span>
-          <span className="id-code">{me.code}</span>
-        </div>
-        <span className="muted">Mostrala a chi ti cerca</span>
-      </Card>
-
       <button className="link-btn skip-btn" onClick={skip} disabled={busy || cooldown > 0}>
         🔄 Cambia bersaglio{cooldown > 0 ? ` (${cooldown}s)` : ''}
+      </button>
+      <button className="link-btn skip-btn" onClick={onHelp}>
+        {tutorial.reopen}
       </button>
     </div>
   )
