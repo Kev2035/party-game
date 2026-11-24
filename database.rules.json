@@ -1,0 +1,26 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "photos": {
+      "$playerId": {
+        ".validate": "newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length < 150000"
+      }
+    },
+    "proofs": {
+      "$challengeId": {
+        ".validate": "newData.isString() && newData.val().beginsWith('data:image/') && newData.val().length < 150000"
+      }
+    },
+    "intents": {
+      "$intentId": {
+        ".validate": "newData.hasChildren(['type', 'playerId'])"
+      }
+    },
+    "finaleTaps": {
+      "$playerId": {
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 100000"
+      }
+    }
+  }
+}

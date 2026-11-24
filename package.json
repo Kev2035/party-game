@@ -1,0 +1,27 @@
+{
+  "name": "party-game",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:https": "vite --host --mode https",
+    "build": "vite build",
+    "check": "node scripts/check.mjs",
+    "preview": "vite preview",
+    "deploy": "npx --yes vercel@latest pull --yes --environment=production && npx --yes vercel@latest build --prod && npx --yes vercel@latest deploy --prebuilt --prod",
+    "emulators": "npx --yes firebase-tools@latest emulators:start --only auth,database --project demo-party-game"
+  },
+  "dependencies": {
+    "firebase": "^13.0.0",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "roughjs": "^4.6.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.4"
+  }
+}
